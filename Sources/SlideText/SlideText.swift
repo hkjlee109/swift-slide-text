@@ -5,9 +5,20 @@ public struct SlideText: View {
     
     @State private var textWidth: Double = .zero
     @State private var viewWidth: Double = .zero
-    
     @State private var xOffset: CGFloat = 0
     
+    private var gapWidth: Double  {
+        get {
+            return (textWidth > viewWidth) ? viewWidth / 3 : viewWidth - textWidth
+        }
+    }
+    
+    private var needSliding: Bool {
+        get {
+            return textWidth > viewWidth
+        }
+    }
+
     public var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
@@ -17,16 +28,20 @@ public struct SlideText: View {
                         self.textWidth = width
                     }
                 
-                Spacer(minLength: (textWidth < viewWidth) ?  viewWidth - textWidth : textWidth / 10)
+                Spacer(minLength: gapWidth)
                 
                 Text(text)
                     .fixedSize(horizontal: true, vertical: false)
             }
             .offset(x: xOffset, y: 0)
             .onAppear {
-                if(textWidth > viewWidth) {
-                    withAnimation(.linear(duration: 5).delay(3).repeatForever(autoreverses: false)) {
-                        xOffset = -textWidth * 1.1
+                if needSliding {
+                    withAnimation(
+                        .linear(duration: 5)
+                        .delay(3)
+                        .repeatForever(autoreverses: false)
+                    ) {
+                        xOffset = -(textWidth + gapWidth)
                     }
                 }
             }
