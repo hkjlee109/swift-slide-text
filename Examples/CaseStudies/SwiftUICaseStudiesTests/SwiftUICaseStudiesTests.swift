@@ -1,10 +1,3 @@
-//
-//  SwiftUICaseStudiesTests.swift
-//  SwiftUICaseStudiesTests
-//
-//  Created by Harry Lee on 13.01.23.
-//
-
 import XCTest
 @testable import SwiftUICaseStudies
 

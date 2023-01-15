@@ -1,19 +1,11 @@
-//
-//  ContentView.swift
-//  SwiftUICaseStudies
-//
-//  Created by Harry Lee on 13.01.23.
-//
-
 import SwiftUI
+import SlideText
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundColor(.accentColor)
-            Text("Hello, world!")
+        VStack() {
+            SlideText("Lorem ipsum")
+            SlideText("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
         }
         .padding()
     }

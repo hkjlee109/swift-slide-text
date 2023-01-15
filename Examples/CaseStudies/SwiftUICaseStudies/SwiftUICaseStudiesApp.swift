@@ -1,10 +1,3 @@
-//
-//  SwiftUICaseStudiesApp.swift
-//  SwiftUICaseStudies
-//
-//  Created by Harry Lee on 13.01.23.
-//
-
 import SwiftUI
 
 @main
