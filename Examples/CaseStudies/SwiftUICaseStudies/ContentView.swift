@@ -6,6 +6,8 @@ struct ContentView: View {
         VStack() {
             SlideText("Lorem ipsum")
             SlideText("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+            SlideText("Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+                .delay(1)
         }
         .padding()
     }

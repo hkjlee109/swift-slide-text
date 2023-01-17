@@ -2,6 +2,7 @@ import SwiftUI
 
 public struct SlideText: View {
     private let text: String
+    private let delay: Double
     
     @State private var textWidth: Double = .zero
     @State private var viewWidth: Double = .zero
@@ -38,7 +39,7 @@ public struct SlideText: View {
                 if needSliding {
                     withAnimation(
                         .linear(duration: 5)
-                        .delay(3)
+                        .delay(delay)
                         .repeatForever(autoreverses: false)
                     ) {
                         xOffset = -(textWidth + gapWidth)
@@ -53,8 +54,15 @@ public struct SlideText: View {
         }
     }
     
-    public init(_ text: String) {
+    public init(_ text: String, delay: Double = 3) {
         self.text = text
+        self.delay = delay
+    }
+}
+
+extension SlideText {
+    public func delay(_ delay: Double) -> SlideText {
+        SlideText(self.text, delay: delay)
     }
 }
 
