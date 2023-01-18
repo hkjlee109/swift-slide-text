@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7406121C2976D5A9004C2334 /* UISlideText in Frameworks */ = {isa = PBXBuildFile; productRef = 7406121B2976D5A9004C2334 /* UISlideText */; };
 		74C169762971C496005B1BB5 /* SwiftUICaseStudiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C169752971C496005B1BB5 /* SwiftUICaseStudiesApp.swift */; };
 		74C169782971C496005B1BB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C169772971C496005B1BB5 /* ContentView.swift */; };
 		74C1697A2971C498005B1BB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74C169792971C498005B1BB5 /* Assets.xcassets */; };
@@ -20,7 +21,6 @@
 		74C169B22971C70C005B1BB5 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 74C169B02971C70C005B1BB5 /* LaunchScreen.storyboard */; };
 		74C169BD2971C70D005B1BB5 /* UIKitCaseStudiesTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C169BC2971C70D005B1BB5 /* UIKitCaseStudiesTests.swift */; };
 		74C169D52971CA40005B1BB5 /* SlideText in Frameworks */ = {isa = PBXBuildFile; productRef = 74C169D42971CA40005B1BB5 /* SlideText */; };
-		74C169D72971CA48005B1BB5 /* SlideText in Frameworks */ = {isa = PBXBuildFile; productRef = 74C169D62971CA48005B1BB5 /* SlideText */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				74C169D72971CA48005B1BB5 /* SlideText in Frameworks */,
+				7406121C2976D5A9004C2334 /* UISlideText in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +230,7 @@
 			);
 			name = UIKitCaseStudies;
 			packageProductDependencies = (
-				74C169D62971CA48005B1BB5 /* SlideText */,
+				7406121B2976D5A9004C2334 /* UISlideText */,
 			);
 			productName = UIKitCaseStudies;
 			productReference = 74C169A32971C70A005B1BB5 /* UIKitCaseStudies.app */;
@@ -767,11 +767,11 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		74C169D42971CA40005B1BB5 /* SlideText */ = {
+		7406121B2976D5A9004C2334 /* UISlideText */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = SlideText;
+			productName = UISlideText;
 		};
-		74C169D62971CA48005B1BB5 /* SlideText */ = {
+		74C169D42971CA40005B1BB5 /* SlideText */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = SlideText;
 		};

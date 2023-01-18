@@ -2,7 +2,10 @@ import SwiftUI
 
 public struct SlideText: View {
     private let text: String
+    private let speed: Double
     private let delay: Double
+    private let blurPadding: CGFloat
+    
     
     @State private var textWidth: Double = .zero
     @State private var viewWidth: Double = .zero
@@ -20,6 +23,13 @@ public struct SlideText: View {
         }
     }
 
+    public init(_ text: String, speed: Double = 1, delay: Double = 3, blurPadding: CGFloat = 4) {
+        self.text = text
+        self.speed = speed
+        self.delay = delay
+        self.blurPadding = blurPadding
+    }
+    
     public var body: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 0) {
@@ -34,11 +44,12 @@ public struct SlideText: View {
                 Text(text)
                     .fixedSize(horizontal: true, vertical: false)
             }
+            .padding(.horizontal, blurPadding)
             .offset(x: xOffset, y: 0)
             .onAppear {
                 if needSliding {
                     withAnimation(
-                        .linear(duration: 5)
+                        .linear(duration: textWidth / viewWidth * (5 / speed)) 
                         .delay(delay)
                         .repeatForever(autoreverses: false)
                     ) {
@@ -49,20 +60,34 @@ public struct SlideText: View {
         }
         .disabled(true)
         .clipped()
+        .mask(
+            HStack(spacing:0) {
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [Color.black.opacity(0), Color.black]
+                    ),
+                    startPoint: .leading,
+                    endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
+                )
+                .frame(width: blurPadding)
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [Color.black, Color.black]),
+                    startPoint: /*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/,
+                    endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
+                )
+                LinearGradient(
+                    gradient: Gradient(
+                        colors: [Color.black, Color.black.opacity(0)]),
+                    startPoint: /*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/,
+                    endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
+                )
+                .frame(width: blurPadding)
+            }
+        )
         .readWidth { width in
             self.viewWidth = width
         }
-    }
-    
-    public init(_ text: String, delay: Double = 3) {
-        self.text = text
-        self.delay = delay
-    }
-}
-
-extension SlideText {
-    public func delay(_ delay: Double) -> SlideText {
-        SlideText(self.text, delay: delay)
     }
 }
 
