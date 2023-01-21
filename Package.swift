@@ -12,8 +12,8 @@ let package = Package(
             name: "SlideText",
             targets: ["SlideText"]),
         .library(
-            name: "UISlideText",
-            targets: ["UISlideText"]),
+            name: "UISlideTextLabel",
+            targets: ["UISlideTextLabel"]),
     ],
     dependencies: [
     ],
@@ -22,7 +22,7 @@ let package = Package(
             name: "SlideText",
             dependencies: []),
         .target(
-            name: "UISlideText",
+            name: "UISlideTextLabel",
             dependencies: []),
         .testTarget(
             name: "SlideTextTests",
