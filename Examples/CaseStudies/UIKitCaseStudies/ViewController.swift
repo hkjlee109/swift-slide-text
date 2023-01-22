@@ -9,7 +9,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         
         slideTextLabel.translatesAutoresizingMaskIntoConstraints = false
-        slideTextLabel.text = "Lorem ipsum"//dolor sit amet, consectetur adipiscing elit"
+        slideTextLabel.text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit"
         
         view.addSubview(slideTextLabel)
 

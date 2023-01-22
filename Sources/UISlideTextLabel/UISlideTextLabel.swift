@@ -1,18 +1,19 @@
 import UIKit
-import QuartzCore
 
 public class UISlideTextLabel: UILabel {
 
-    private var label1 = UILabel()
+    private var mainLabel = UILabel()
 
+    public var blankWidth: CGFloat = 20
+    
     public override init(frame: CGRect) {
         super.init(frame: frame)
         setup()
     }
     
-    // Todo: Support Storyboard
-    required public init?(coder aDecoder: NSCoder) {
-        super.init(coder: aDecoder)
+    @available(*, unavailable)
+    required init?(coder _: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override open class var layerClass: AnyClass {
@@ -21,39 +22,29 @@ public class UISlideTextLabel: UILabel {
     
     public override var bounds: CGRect {
         didSet {
-            label1.frame = self.bounds
+            mainLabel.frame = self.bounds
+            
+            let intrinsicLabelWidth = mainLabel.sizeThatFits(
+                CGSize(
+                    width: CGFloat.greatestFiniteMagnitude,
+                    height: CGFloat.greatestFiniteMagnitude
+                )
+            ).width
+            
+            print("#bounds.size.width: ", bounds.size.width)
+            print("#intrinsicLabelWidth: ", intrinsicLabelWidth)
+            
+            guard intrinsicLabelWidth > bounds.size.width else { return }
+            
+            (self.layer as? CAReplicatorLayer)?.instanceCount = 2
+            (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(intrinsicLabelWidth + blankWidth, 0.0, 0.0)
         }
     }
 
     public override var text: String? {
         didSet {
-            label1.text = text
+            mainLabel.text = text
         }
-    }
-    
-    private func setup() {
-        super.clipsToBounds = true
-        super.numberOfLines = 1
-        
-        syncLabel()
-    
-        (self.layer as? CAReplicatorLayer)?.instanceCount = 2
-        (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(140, 0.0, 0.0)
-
-        addSubview(label1)
-        
-//        UIView.animate(withDuration: 8.0, delay:0, options: [.repeat], animations: {
-//            self.label1.frame = CGRectMake(self.label1.frame.origin.x - 500, self.label1.frame.origin.y - 0, self.label1.frame.size.width, self.label1.frame.size.height)
-//        }, completion: nil)
-        
-    }
-    
-    private func syncLabel() {
-        label1.text = super.text
-        label1.font = super.font
-        label1.textColor = super.textColor
-//        label1.frame = self.bounds
-        label1.layer.anchorPoint = CGPoint.zero
     }
     
     override open func draw(_ layer: CALayer, in ctx: CGContext) {
@@ -61,5 +52,26 @@ public class UISlideTextLabel: UILabel {
             ctx.setFillColor(bgColor.cgColor)
             ctx.fill(layer.bounds)
         }
+    }
+    
+    private func setup() {
+        super.clipsToBounds = true
+        super.numberOfLines = 1
+        
+        configureMainLabel()
+
+        addSubview(mainLabel)
+        
+//        UIView.animate(withDuration: 8.0, delay:0, options: [.repeat], animations: {
+//            self.label1.frame = CGRectMake(self.label1.frame.origin.x - 500, self.label1.frame.origin.y - 0, self.label1.frame.size.width, self.label1.frame.size.height)
+//        }, completion: nil)
+        
+    }
+    
+    private func configureMainLabel() {
+        mainLabel.text = super.text
+        mainLabel.font = super.font
+        mainLabel.textColor = super.textColor
+        mainLabel.layer.anchorPoint = CGPoint.zero
     }
 }
