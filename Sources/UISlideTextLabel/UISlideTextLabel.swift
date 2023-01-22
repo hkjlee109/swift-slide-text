@@ -21,9 +21,7 @@ public class UISlideTextLabel: UILabel {
     }
     
     public override var bounds: CGRect {
-        didSet {
-            mainLabel.frame = self.bounds
-            
+        didSet {            
             let intrinsicLabelWidth = mainLabel.sizeThatFits(
                 CGSize(
                     width: CGFloat.greatestFiniteMagnitude,
@@ -38,6 +36,16 @@ public class UISlideTextLabel: UILabel {
             
             (self.layer as? CAReplicatorLayer)?.instanceCount = 2
             (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(intrinsicLabelWidth + blankWidth, 0.0, 0.0)
+            
+            let animation = CAKeyframeAnimation()
+            animation.keyPath = "position.x"
+            animation.keyTimes = [0, 1]
+            animation.values = [0, -(intrinsicLabelWidth + blankWidth)]
+            animation.duration = 5
+            animation.isAdditive = true
+
+            self.mainLabel.frame = CGRect(x: bounds.minX, y: bounds.minY, width: intrinsicLabelWidth, height: bounds.height)
+            self.mainLabel.layer.add(animation, forKey: "scroll")
         }
     }
 
@@ -72,6 +80,7 @@ public class UISlideTextLabel: UILabel {
         mainLabel.text = super.text
         mainLabel.font = super.font
         mainLabel.textColor = super.textColor
+//        mainLabel.lineBreakMode = .byClipping
         mainLabel.layer.anchorPoint = CGPoint.zero
     }
 }
