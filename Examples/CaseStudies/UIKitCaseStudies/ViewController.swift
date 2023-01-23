@@ -1,9 +1,9 @@
 import UIKit
-import UISlideTextLabel
+import UISlideLabel
 
 class ViewController: UIViewController {
 
-    private let demoLabel1 = UISlideTextLabel()
+    private let demoLabel1 = UISlideLabel()
 
     override func viewDidLoad() {
         super.viewDidLoad()

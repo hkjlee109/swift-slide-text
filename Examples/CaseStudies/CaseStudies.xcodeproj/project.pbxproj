@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		744168DD297C1C9A00B0AFE6 /* UISlideTextLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 744168DC297C1C9A00B0AFE6 /* UISlideTextLabel */; };
+		744168DF297EB43300B0AFE6 /* UISlideLabel in Frameworks */ = {isa = PBXBuildFile; productRef = 744168DE297EB43300B0AFE6 /* UISlideLabel */; };
 		74C169762971C496005B1BB5 /* SwiftUICaseStudiesApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C169752971C496005B1BB5 /* SwiftUICaseStudiesApp.swift */; };
 		74C169782971C496005B1BB5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74C169772971C496005B1BB5 /* ContentView.swift */; };
 		74C1697A2971C498005B1BB5 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 74C169792971C498005B1BB5 /* Assets.xcassets */; };
@@ -81,7 +81,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				744168DD297C1C9A00B0AFE6 /* UISlideTextLabel in Frameworks */,
+				744168DF297EB43300B0AFE6 /* UISlideLabel in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,7 +230,7 @@
 			);
 			name = UIKitCaseStudies;
 			packageProductDependencies = (
-				744168DC297C1C9A00B0AFE6 /* UISlideTextLabel */,
+				744168DE297EB43300B0AFE6 /* UISlideLabel */,
 			);
 			productName = UIKitCaseStudies;
 			productReference = 74C169A32971C70A005B1BB5 /* UIKitCaseStudies.app */;
@@ -767,9 +767,9 @@
 /* End XCConfigurationList section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		744168DC297C1C9A00B0AFE6 /* UISlideTextLabel */ = {
+		744168DE297EB43300B0AFE6 /* UISlideLabel */ = {
 			isa = XCSwiftPackageProductDependency;
-			productName = UISlideTextLabel;
+			productName = UISlideLabel;
 		};
 		74C169D42971CA40005B1BB5 /* SlideText */ = {
 			isa = XCSwiftPackageProductDependency;

@@ -1,6 +1,6 @@
 import UIKit
 
-public class UISlideTextLabel: UILabel {
+public class UISlideLabel: UILabel {
 
     private var mainLabel = UILabel()
 
