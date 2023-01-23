@@ -61,6 +61,18 @@ public class UISlideLabel: UILabel {
         }
     }
     
+    public override var font: UIFont! {
+        didSet {
+            mainLabel.font = font
+        }
+    }
+    
+    public override var textColor: UIColor! {
+        didSet {
+            mainLabel.textColor = textColor
+        }
+    }
+    
     override open func draw(_ layer: CALayer, in ctx: CGContext) {
         if let bgColor = backgroundColor {
             ctx.setFillColor(bgColor.cgColor)
@@ -101,7 +113,7 @@ public class UISlideLabel: UILabel {
         animation.keyTimes = [ 0, pauseDurationRatio as NSNumber, 1 ]
         animation.values = [0, 0, -distance]
         animation.isAdditive = true
-        animation.duration = pauseDuration + scrollDuration
+        animation.duration = (pauseDuration + scrollDuration) * speed
         animation.repeatCount = .infinity
         
         self.mainLabel.layer.add(animation, forKey: "scroll")
@@ -138,7 +150,7 @@ public class UISlideLabel: UILabel {
             [ x, o, o, o, x ],
             [ o, o, o, o, x ]
         ]
-        fadeAnimation.duration = pauseDuration + scrollDuration
+        fadeAnimation.duration = (pauseDuration + scrollDuration) * speed
         fadeAnimation.repeatCount = .infinity
     
         self.layer.mask = gradientLayer
