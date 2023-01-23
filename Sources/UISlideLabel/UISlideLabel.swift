@@ -27,6 +27,10 @@ public class UISlideLabel: UILabel {
         fatalError("init(coder:) has not been implemented")
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+    
     override open class var layerClass: AnyClass {
         return CAReplicatorLayer.self
     }
@@ -34,24 +38,19 @@ public class UISlideLabel: UILabel {
     public override var bounds: CGRect {
         didSet {
             guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
-                self.mainLabel.frame = bounds
-                removeReplication()
-                removeScrollAnimation()
-                removeFadeAnimation()
+                mainLabel.frame = bounds
+                deactivate()
                 return
             }
             
-            self.mainLabel.frame = CGRect(
+            mainLabel.frame = CGRect(
                 x: bounds.minX,
                 y: bounds.minY,
                 width: mainLabel.intrinsicContentSize.width,
-                height: bounds.height)
-
-            addReplication()
-            addFadeAnimation()
-            addScrollAnimation(
-                distance: mainLabel.intrinsicContentSize.width + blankWidth
+                height: bounds.height
             )
+
+            activateIfNeeded()
         }
     }
 
@@ -86,6 +85,19 @@ public class UISlideLabel: UILabel {
         
         configureMainLabel()
         addSubview(mainLabel)
+        
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(activateIfNeeded),
+            name: UIApplication.didBecomeActiveNotification,
+            object: nil
+        )
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(deactivate),
+            name: UIApplication.didEnterBackgroundNotification,
+            object: nil
+        )
     }
     
     private func configureMainLabel() {
@@ -132,8 +144,9 @@ public class UISlideLabel: UILabel {
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         gradientLayer.bounds = self.layer.bounds
+        gradientLayer.locations = [ 0.0, 0.05, 0.95, 1.0 ]
         gradientLayer.position = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
-        gradientLayer.colors = [ o, o, o, o, o ]
+        gradientLayer.colors = [ o, o, o, o ]
         
         fadeAnimation.keyPath = "colors"
         fadeAnimation.keyTimes = [
@@ -144,11 +157,11 @@ public class UISlideLabel: UILabel {
             1
         ]
         fadeAnimation.values = [
-            [ o, o, o, o, x ],
-            [ o, o, o, o, x ],
-            [ x, o, o, o, x ],
-            [ x, o, o, o, x ],
-            [ o, o, o, o, x ]
+            [ o, o, o, x ],
+            [ o, o, o, x ],
+            [ x, o, o, x ],
+            [ x, o, o, x ],
+            [ o, o, o, x ]
         ]
         fadeAnimation.duration = (pauseDuration + scrollDuration) * speed
         fadeAnimation.repeatCount = .infinity
@@ -160,5 +173,23 @@ public class UISlideLabel: UILabel {
     private func removeFadeAnimation() {
         self.layer.mask?.removeAnimation(forKey: "fade")
         self.layer.mask = nil
+    }
+    
+    @objc private func activateIfNeeded() {
+        guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
+            return
+        }
+
+        addReplication()
+        addFadeAnimation()
+        addScrollAnimation(
+            distance: mainLabel.intrinsicContentSize.width + blankWidth
+        )
+    }
+    
+    @objc private func deactivate() {
+        removeReplication()
+        removeScrollAnimation()
+        removeFadeAnimation()
     }
 }
