@@ -35,7 +35,7 @@ public class UISlideLabel: UILabel {
         didSet {
             guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
                 self.mainLabel.frame = bounds
-                (self.layer as? CAReplicatorLayer)?.instanceCount = 1
+                removeReplication()
                 removeScrollAnimation()
                 removeFadeAnimation()
                 return
@@ -46,14 +46,8 @@ public class UISlideLabel: UILabel {
                 y: bounds.minY,
                 width: mainLabel.intrinsicContentSize.width,
                 height: bounds.height)
-            
-            (self.layer as? CAReplicatorLayer)?.instanceCount = 2
-            (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(
-                mainLabel.intrinsicContentSize.width + blankWidth,
-                0.0,
-                0.0
-            )
 
+            addReplication()
             addFadeAnimation()
             addScrollAnimation(
                 distance: mainLabel.intrinsicContentSize.width + blankWidth
@@ -88,6 +82,19 @@ public class UISlideLabel: UILabel {
         self.mainLabel.textColor = super.textColor
     }
     
+    private func addReplication() {
+        (self.layer as? CAReplicatorLayer)?.instanceCount = 2
+        (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(
+            mainLabel.intrinsicContentSize.width + blankWidth,
+            0.0,
+            0.0
+        )
+    }
+    
+    private func removeReplication() {
+        (self.layer as? CAReplicatorLayer)?.instanceCount = 1
+    }
+    
     private func addScrollAnimation(distance: CGFloat) {
         let animation = CAKeyframeAnimation()
         animation.keyPath = "position.x"
@@ -107,35 +114,35 @@ public class UISlideLabel: UILabel {
     private func addFadeAnimation() {
         let x = UIColor.clear.cgColor
         let o = UIColor.black.cgColor
-        
         let gradientLayer = CAGradientLayer()
+        let fadeAnimation = CAKeyframeAnimation()
+        
         gradientLayer.startPoint = CGPoint(x: 0.0, y: 0.5)
         gradientLayer.endPoint = CGPoint(x: 1.0, y: 0.5)
         gradientLayer.bounds = self.layer.bounds
         gradientLayer.position = CGPoint(x: self.bounds.midX, y: self.bounds.midY)
         gradientLayer.colors = [ o, o, o, o, o ]
         
-        let maskAnimation = CAKeyframeAnimation()
-        maskAnimation.keyPath = "colors"
-        maskAnimation.keyTimes = [
+        fadeAnimation.keyPath = "colors"
+        fadeAnimation.keyTimes = [
             0,
             pauseDurationRatio as NSNumber,
             (pauseDurationRatio + 0.04) as NSNumber,
             0.9,
             1
         ]
-        maskAnimation.values = [
+        fadeAnimation.values = [
             [ o, o, o, o, x ],
             [ o, o, o, o, x ],
             [ x, o, o, o, x ],
             [ x, o, o, o, x ],
             [ o, o, o, o, x ]
         ]
-        maskAnimation.duration = pauseDuration + scrollDuration
-        maskAnimation.repeatCount = .infinity
+        fadeAnimation.duration = pauseDuration + scrollDuration
+        fadeAnimation.repeatCount = .infinity
     
         self.layer.mask = gradientLayer
-        self.layer.mask?.add(maskAnimation, forKey: "fade")
+        self.layer.mask?.add(fadeAnimation, forKey: "fade")
     }
     
     private func removeFadeAnimation() {
