@@ -31,50 +31,36 @@ public class UISlideLabel: UILabel {
         NotificationCenter.default.removeObserver(self)
     }
     
-    public override var bounds: CGRect {
+    open override var bounds: CGRect {
         didSet {
-            guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
-                mainLabel.frame = bounds
-                deactivate()
-                return
-            }
-            
-            mainLabel.frame = CGRect(
-                x: bounds.minX,
-                y: bounds.minY,
-                width: mainLabel.intrinsicContentSize.width,
-                height: bounds.height
-            )
-
-            activateIfNeeded()
+            invalidate()
         }
     }
 
-    public override var text: String? {
+    open override var text: String? {
         didSet {
             guard mainLabel.text != text else { return }
             mainLabel.text = text
-            deactivate()
-            activateIfNeeded()
+            invalidate()
         }
     }
     
-    public override var font: UIFont! {
+    open override var font: UIFont! {
         didSet {
             guard mainLabel.font != font else { return }
             mainLabel.font = font
-            deactivate()
-            activateIfNeeded()
+            invalidate()
         }
     }
     
-    public override var textColor: UIColor! {
+    open override var textColor: UIColor! {
         didSet {
+            guard mainLabel.textColor != textColor else { return }
             mainLabel.textColor = textColor
         }
     }
     
-    public override func didMoveToWindow() {
+    open override func didMoveToWindow() {
         guard let _ = self.window else {
             deactivate()
             return
@@ -120,6 +106,23 @@ public class UISlideLabel: UILabel {
         self.mainLabel.textColor = super.textColor
     }
     
+    private func invalidate() {
+        guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
+            mainLabel.frame = bounds
+            deactivate()
+            return
+        }
+        
+        mainLabel.frame = CGRect(
+            x: bounds.minX,
+            y: bounds.minY,
+            width: mainLabel.intrinsicContentSize.width,
+            height: bounds.height
+        )
+
+        activateIfNeeded()
+    }
+
     private func addReplication() {
         (self.layer as? CAReplicatorLayer)?.instanceCount = 2
         (self.layer as? CAReplicatorLayer)?.instanceTransform = CATransform3DMakeTranslation(
