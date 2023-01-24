@@ -52,13 +52,19 @@ public class UISlideLabel: UILabel {
 
     public override var text: String? {
         didSet {
+            guard mainLabel.text != text else { return }
             mainLabel.text = text
+            deactivate()
+            activateIfNeeded()
         }
     }
     
     public override var font: UIFont! {
         didSet {
+            guard mainLabel.font != font else { return }
             mainLabel.font = font
+            deactivate()
+            activateIfNeeded()
         }
     }
     
