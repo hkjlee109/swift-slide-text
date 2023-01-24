@@ -31,10 +31,6 @@ public class UISlideLabel: UILabel {
         NotificationCenter.default.removeObserver(self)
     }
     
-    override open class var layerClass: AnyClass {
-        return CAReplicatorLayer.self
-    }
-    
     public override var bounds: CGRect {
         didSet {
             guard mainLabel.intrinsicContentSize.width > bounds.size.width else {
@@ -72,13 +68,25 @@ public class UISlideLabel: UILabel {
         }
     }
     
-    override open func draw(_ layer: CALayer, in ctx: CGContext) {
+    public override func didMoveToWindow() {
+        guard let _ = self.window else {
+            deactivate()
+            return
+        }
+        activateIfNeeded()
+    }
+    
+    open override class var layerClass: AnyClass {
+        return CAReplicatorLayer.self
+    }
+    
+    open override func draw(_ layer: CALayer, in ctx: CGContext) {
         if let bgColor = backgroundColor {
             ctx.setFillColor(bgColor.cgColor)
             ctx.fill(layer.bounds)
         }
     }
-    
+
     private func setup() {
         super.clipsToBounds = true
         super.numberOfLines = 1
