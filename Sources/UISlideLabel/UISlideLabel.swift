@@ -5,8 +5,8 @@ public class UISlideLabel: UILabel {
     private var mainLabel = UILabel()
 
     public var speed: Double = 1
-    public var secondsPerScreen: Double = 5
-    public var pauseDuration: Double = 2
+    public var secondsPerScreen: Double = 7
+    public var pauseDuration: Double = 4
     public var blankWidth: CGFloat = 40
     
     private var scrollDuration: Double {
@@ -203,10 +203,15 @@ public class UISlideLabel: UILabel {
             distance: mainLabel.intrinsicContentSize.width + blankWidth
         )
     }
-    
+
     @objc private func deactivate() {
         removeReplication()
         removeScrollAnimation()
         removeFadeAnimation()
+    }
+    
+    override open func layoutSubviews() {
+        super.layoutSubviews()
+        invalidate()
     }
 }

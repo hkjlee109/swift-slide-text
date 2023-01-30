@@ -3,9 +3,11 @@ import SwiftUI
 public struct SlideText: View {
     private let text: String
     private let speed: Double
-    private let delay: Double
-    private let blurPadding: CGFloat
+    private let pauseDuration: Double
     
+    public var secondsPerScreen: Double = 7
+    
+    public var blankWidth: CGFloat = 40
     
     @State private var textWidth: Double = .zero
     @State private var viewWidth: Double = .zero
@@ -13,7 +15,7 @@ public struct SlideText: View {
     
     private var gapWidth: Double  {
         get {
-            return (textWidth > viewWidth) ? viewWidth / 3 : viewWidth - textWidth
+            return (textWidth > viewWidth) ? blankWidth : viewWidth - textWidth
         }
     }
     
@@ -23,11 +25,10 @@ public struct SlideText: View {
         }
     }
 
-    public init(_ text: String, speed: Double = 1, delay: Double = 3, blurPadding: CGFloat = 4) {
+    public init(_ text: String, speed: Double = 1, pauseDuration: Double = 4) {
         self.text = text
         self.speed = speed
-        self.delay = delay
-        self.blurPadding = blurPadding
+        self.pauseDuration = pauseDuration
     }
     
     public var body: some View {
@@ -44,13 +45,12 @@ public struct SlideText: View {
                 Text(text)
                     .fixedSize(horizontal: true, vertical: false)
             }
-            .padding(.horizontal, blurPadding)
             .offset(x: xOffset, y: 0)
             .onAppear {
                 if needSliding {
                     withAnimation(
-                        .linear(duration: textWidth / viewWidth * (5 / speed)) 
-                        .delay(delay)
+                        .linear(duration: textWidth / viewWidth * (secondsPerScreen / speed))
+                        .delay(pauseDuration)
                         .repeatForever(autoreverses: false)
                     ) {
                         xOffset = -(textWidth + gapWidth)
@@ -69,7 +69,7 @@ public struct SlideText: View {
                     startPoint: .leading,
                     endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
                 )
-                .frame(width: blurPadding)
+                .frame(width: 0)
                 LinearGradient(
                     gradient: Gradient(
                         colors: [Color.black, Color.black]),
@@ -82,7 +82,7 @@ public struct SlideText: View {
                     startPoint: /*@START_MENU_TOKEN@*/.leading/*@END_MENU_TOKEN@*/,
                     endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
                 )
-                .frame(width: blurPadding)
+                .frame(width: needSliding ? 12 : 0)
             }
         )
         .readWidth { width in
