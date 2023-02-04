@@ -1,13 +1,13 @@
 import SwiftUI
 
 public struct SlideText: View {
+    
+    public var secondsPerScreen: Double = 7
+    public var blankWidth: CGFloat = 40
+    
     private let text: String
     private let speed: Double
     private let pauseDuration: Double
-    
-    public var secondsPerScreen: Double = 7
-    
-    public var blankWidth: CGFloat = 40
     
     @State private var textWidth: Double = .zero
     @State private var viewWidth: Double = .zero
@@ -22,6 +22,12 @@ public struct SlideText: View {
     private var needSliding: Bool {
         get {
             return textWidth > viewWidth
+        }
+    }
+    
+    private var animationDuration: Double {
+        get {
+            return textWidth / viewWidth * (secondsPerScreen / speed)
         }
     }
 
@@ -40,16 +46,16 @@ public struct SlideText: View {
                         self.textWidth = width
                     }
                 
-                Spacer(minLength: gapWidth)
-                
-                Text(text)
-                    .fixedSize(horizontal: true, vertical: false)
+                    Spacer(minLength: gapWidth)
+                    
+                    Text(text)
+                        .fixedSize(horizontal: true, vertical: false)
             }
             .offset(x: xOffset, y: 0)
             .onAppear {
                 if needSliding {
                     withAnimation(
-                        .linear(duration: textWidth / viewWidth * (secondsPerScreen / speed))
+                        .linear(duration: animationDuration)
                         .delay(pauseDuration)
                         .repeatForever(autoreverses: false)
                     ) {
@@ -69,7 +75,7 @@ public struct SlideText: View {
                     startPoint: .leading,
                     endPoint: /*@START_MENU_TOKEN@*/.trailing/*@END_MENU_TOKEN@*/
                 )
-                .frame(width: 0)
+                .modifier(FrameWidthOnOffSwitch(for: xOffset, onRange: (-textWidth, 0)))
                 LinearGradient(
                     gradient: Gradient(
                         colors: [Color.black, Color.black]),
@@ -105,5 +111,24 @@ fileprivate extension View {
             }
         )
         .onPreferenceChange(WidthPreferenceKey.self, perform: onChange)
+    }
+}
+
+fileprivate struct FrameWidthOnOffSwitch: AnimatableModifier {
+    private var value: CGFloat
+    private var onRange: (CGFloat, CGFloat)
+    
+    var animatableData: CGFloat {
+        get { value }
+        set { value = newValue }
+    }
+    
+    init(for value: CGFloat, onRange: (CGFloat, CGFloat)) {
+        self.value = value
+        self.onRange = onRange
+    }
+    
+    func body(content: Content) -> some View {
+        content.frame(width: (onRange.0 < value && value < onRange.1) ? 12 : 0)
     }
 }
